@@ -258,8 +258,6 @@
 ** MATERIALS
 **--------------------------------------------------------------------
 *material,name=EXAMPLE_VUSDLFD_V2
-*density
-7.8e-9
 *elastic
 210000.0, 0.3
 *plastic
