@@ -19,20 +19,20 @@
      .          FIELD(nblock,nfieldv)
       character*80 cmname
 !-----Data from ABAQUS
-      dimension stressdata(maxblk*(ndir+nshr))
-      integer jSData(maxblk*(ndir+nshr))
-      character*3 cSData(maxblk*(ndir+nshr))
+      dimension stressdata(maxblk*(NDIR+NSHR))
+      integer jSData(maxblk*(NDIR+NSHR))
+      character*3 cSData(maxblk*(NDIR+NSHR))
       integer jStatus
 !-----------------------------------------------------------------------
 !-----Declaration internal variables
 !-----------------------------------------------------------------------
       integer i
-      real*8 s(nblock,6)
-      real*8 SMISES(nblock),SIGH(nblock),TRIAX(nblock)
+      real*8 s(NBLOCK,NDIR+NSHR)
+      real*8 SMISES(NBLOCK),SIGH(NBLOCK),TRIAX(NBLOCK)
 !-----------------------------------------------------------------------
 !     Access stress tensor
 !-----------------------------------------------------------------------
-      call vgetvrm(  'S' , stressdata,jSData,cSData,jStatus)
+      call vgetvrm( 'S', stressdata,jSData,cSData,jStatus)
 !-----------------------------------------------------------------------
 !     Extract data from stressdata
 !-----------------------------------------------------------------------
