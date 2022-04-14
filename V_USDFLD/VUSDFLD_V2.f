@@ -13,11 +13,11 @@
 !-----------------------------------------------------------------------
 !-----Declaration ABAQUS variables
 !-----------------------------------------------------------------------
-      dimension JELEM(nblock),COORDMP(nblock,*),DIRECT(nblock,3,3),
-     .          T(nblock,3,3),CHARLENGTH(nblock),PROPS(nprops),
-     .          STATEOLD(nblock,nstatev),STATENEW(nblock,nstatev),
-     .          FIELD(nblock,nfieldv)
-      character*80 cmname
+      dimension JELEM(NBLOCK),COORDMP(NBLOCK,*),DIRECT(NBLOCK,3,3),
+     .          T(NBLOCK,3,3),CHARLENGTH(NBLOCK),PROPS(NPROPS),
+     .          STATEOLD(NBLOCK,NSTATEV),STATENEW(NBLOCK,NSTATEV),
+     .          FIELD(NBLOCK,NFIELDV)
+      character*80 CMNAME
 !-----Data from ABAQUS
       dimension stressdata(maxblk*(ndir+nshr))
       integer jSData(maxblk*(ndir+nshr))
