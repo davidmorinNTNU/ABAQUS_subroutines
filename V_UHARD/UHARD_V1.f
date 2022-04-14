@@ -3,8 +3,9 @@
 !     Subroutine UHARD
 !$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 !$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      SUBROUTINE UHARD(SYIELD,HARD,EQPLAS,EQPLASRT,TIME,DTIME,TEMP,
-     + DTEMP,NOEL,NPT,LAYER,KSPT,KSTEP,KINC,CMNAME,NSTATV,
+      SUBROUTINE UHARD(SYIELD,HARD,EQPLAS,EQPLASRT,
+     + TIME,DTIME,TEMP,DTEMP,
+     + NOEL,NPT,LAYER,KSPT,KSTEP,KINC,CMNAME,NSTATV,
      + STATEV,NUMFIELDV,PREDEF,DPRED,NUMPROPS,PROPS)
       INCLUDE 'ABA_PARAM.INC'
 !-----------------------------------------------------------------------
@@ -22,6 +23,7 @@
 !-----Declaration internal variables
 !-----------------------------------------------------------------------
       real*8 T1oQ1,T2oQ2,T3oQ3
+      real*8 vp,dvp
 !-----------------------------------------------------------------------
 !     Beginning of subroutine
 !-----------------------------------------------------------------------
@@ -62,7 +64,6 @@ c
       SYIELD = (SIGMA0+Q1*(1.0-exp(-T1oQ1*EQPLAS))
      +                +Q2*(1.0-exp(-T2oQ2*EQPLAS))
      +                +Q3*(1.0-exp(-T3oQ3*EQPLAS)))
-     +         *(1.0+EQPLASRT/PDOT0)**C
 !-----------------------------------------------------------------------
 !     Compute yield stress derivatives
 !-----------------------------------------------------------------------
@@ -70,14 +71,24 @@ c     Derivative with respect to equivalent plastic strain
       HARD(1) =(T1*exp(-T1oQ1*EQPLAS)
      +         +T2*exp(-T2oQ2*EQPLAS)
      +         +T3*exp(-T3oQ3*EQPLAS))
-     +         *(1.0+EQPLASRT/PDOT0)**C
 c     Derivative with respect to equivalent plastic strain rate
       HARD(2) =(SIGMA0+Q1*(1.0-exp(-T1oQ1*EQPLAS))
      +                +Q2*(1.0-exp(-T2oQ2*EQPLAS))
      +                +Q3*(1.0-exp(-T3oQ3*EQPLAS)))
-     +         *(1.0+EQPLASRT/PDOT0)**(C-1.0)*(C/PDOT0)
 c     Derivative with respect to temperature
       HARD(3) = 0.0
+!-----------------------------------------------------------------------
+!     Apply rate-sensitivity if needed
+!-----------------------------------------------------------------------
+      if((C.gt.0.0).and.(PDOT0.gt.0.0))then
+c         Compute rate effects and its derivative    
+          vp  = (1.0+EQPLASRT/PDOT0)**C
+          dvp = (1.0+EQPLASRT/PDOT0)**(C-1.0)*(C/PDOT0)
+c         Apply rate effects to the required quantities
+          HARD(2) = SYIELD*dvp
+          HARD(1) = HARD(1)*vp
+          SYIELD  = SYIELD*vp
+      endif
 !-----------------------------------------------------------------------
 !     End of subroutine
 !-----------------------------------------------------------------------
