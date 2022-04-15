@@ -3,7 +3,7 @@ import sys
 import numpy as np
 #
 def write_results(filename,data,keys):
-    header = '*'+,'.join(keys)+'\n'
+    header = '*'+','.join(keys)+'\n'
     nvars,ntime  = np.shape(data)[1],np.shape(data)[0]
     format_to_write = '{},'*(nvars-1)+'{}\n'
     fp = open(filename+'_data.csv','w')
