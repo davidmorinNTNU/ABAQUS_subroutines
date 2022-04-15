@@ -69,6 +69,7 @@
 *Instance, name=TENS-1, part=TENS
 *End Instance
 *Instance, name=COMP-1, part=COMP
+6.0, 0.0, 0.0
 *End Instance
 *End Assembly
 **--------------------------------------------------------------------
