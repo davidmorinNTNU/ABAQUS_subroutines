@@ -72,9 +72,7 @@ c     Derivative with respect to equivalent plastic strain
      +         +T2*exp(-T2oQ2*EQPLAS)
      +         +T3*exp(-T3oQ3*EQPLAS))
 c     Derivative with respect to equivalent plastic strain rate
-      HARD(2) =(SIGMA0+Q1*(1.0-exp(-T1oQ1*EQPLAS))
-     +                +Q2*(1.0-exp(-T2oQ2*EQPLAS))
-     +                +Q3*(1.0-exp(-T3oQ3*EQPLAS)))
+      HARD(2) = 0.0
 c     Derivative with respect to temperature
       HARD(3) = 0.0
 !-----------------------------------------------------------------------
