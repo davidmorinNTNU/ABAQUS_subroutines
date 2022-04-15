@@ -31,7 +31,12 @@
   1
 *Elset, elset=ELEMENTS
  1,
-*Solid Section, elset=ELEMENTS, material=EXAMPLE_UMAT, controls=EC-1
+*Orientation, name=Ori-1
+**  n1x,   n1y,   n1z,   n2x,   n2y,   n2z
+      1,     0,     0,     0,     1,     0
+** axis, angle
+      3,   0.0
+*Solid Section, elset=ELEMENTS, material=EXAMPLE_UMAT, controls=EC-1, orientation=Ori-1
 ,
 *End Part
 **--------------------------------------------------------------------
