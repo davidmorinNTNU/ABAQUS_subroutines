@@ -7,60 +7,31 @@
 **--------------------------------------------------------------------
 ** PARTS
 **--------------------------------------------------------------------
-*Part, name=PATCH
+*Part, name=ONE_ELEMENT
 *Node
-1,0.9,0.9,0.3
-2,0.9,0.6,0.3
-3,0.9,0.3,0.3
-4,0.9,0,0.3
-5,0.9,0.9,0
-6,0.9,0.6,0
-7,0.9,0.3,0
-8,0.9,0,0
-9,0.6,0.9,0.3
-10,0.6,0.6,0.3
-11,0.6,0.3,0.3
-12,0.6,0,0.3
-13,0.6,0.9,0
-14,0.6,0.6,0
-15,0.6,0.3,0
-16,0.6,0,0
-17,0.3,0.9,0.3
-18,0.3,0.6,0.3
-19,0.3,0.3,0.3
-20,0.3,0,0.3
-21,0.3,0.9,0
-22,0.3,0.6,0
-23,0.3,0.3,0
-24,0.3,0,0
-25,0,0.9,0.3
-26,0,0.6,0.3
-27,0,0.3,0.3
-28,0,0,0.3
-29,0,0.9,0
-30,0,0.6,0
-31,0,0.3,0
-32,0,0,0
+*Node
+      1, 5,    5,    5
+      2, 5,    0,    5
+      3, 5,    0,    0
+      4, 5,    5,    0
+      5, 0,    0,    5
+      6, 0,    0,    0
+      7, 0,    5,    0
+      8, 0,    5,    5  
 *Element, type=C3D8R
- 1,  9, 10, 14, 13,  1,  2,  6,  5
- 2, 10, 11, 15, 14,  2,  3,  7,  6
- 3, 11, 12, 16, 15,  3,  4,  8,  7
- 4, 17, 18, 22, 21,  9, 10, 14, 13
- 5, 18, 19, 23, 22, 10, 11, 15, 14
- 6, 19, 20, 24, 23, 11, 12, 16, 15
- 7, 25, 26, 30, 29, 17, 18, 22, 21
- 8, 26, 27, 31, 30, 18, 19, 23, 22
- 9, 27, 28, 32, 31, 19, 20, 24, 23
-*Nset, nset=SYMY, generate
-  4,  32,   4
-*Nset, nset=SYMX, generate
- 25,  32,   1
+1, 8, 5, 6, 7, 1, 2, 3, 4
+*Nset, nset=CLAMP
+  2,  3,  5,  6
+*Nset, nset=SYMX
+  5,  6,  7,  8
+*Nset, nset=LOAD
+  1,  4,  7,  8
 *Nset, nset=SYMZ
-  5,  6,  7,  8, 13, 14, 15, 16, 21, 22, 23, 24, 29, 30, 31, 32
-*Nset, nset=LOAD, generate
-  1,  29,   4
-*Elset, elset=ELEMENTS, generate
- 1,  9,  1
+  3,  4,  6,  7
+*Nset, nset=DISP
+  1
+*Elset, elset=ELEMENTS
+ 1,
 *Solid Section, elset=ELEMENTS, material=EXAMPLE_UVARM, controls=EC-1
 ,
 *End Part
@@ -68,8 +39,28 @@
 ** ASSEMBLY
 **--------------------------------------------------------------------
 *Assembly, name=Assembly
-*Instance, name=PATCH-1, part=PATCH
-*End Instance  
+*Instance, name=ONE_ELEMENT-1, part=ONE_ELEMENT
+*End Instance
+*Node
+      1,           0.,          6.,           0.
+      2,           0.,         -1.,           0.
+*Nset, nset=REFPT_TOP
+ 1,
+*Nset, nset=REFPT_BOT
+ 2,
+*Surface, type=NODE, name=ONE_ELEMENT-1_LOAD_CNS_, internal
+ONE_ELEMENT-1.LOAD, 1.
+*Surface, type=NODE, name=ONE_ELEMENT-1_CLAMP_CNS_, internal
+ONE_ELEMENT-1.CLAMP, 1.
+**--------------------------------------------------------------------
+** Constraint: MPC
+**--------------------------------------------------------------------
+*Coupling, constraint name="TOP CONSTRAINT", ref node=REFPT_TOP, surface=ONE_ELEMENT-1_LOAD_CNS_
+*Kinematic
+2, 2
+*Coupling, constraint name="BOTTOM CONSTRAINT", ref node=REFPT_BOT, surface=ONE_ELEMENT-1_CLAMP_CNS_
+*Kinematic
+2, 2
 *End Assembly
 **--------------------------------------------------------------------
 ** ELEMENT CONTROLS
@@ -91,11 +82,22 @@
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary
-PATCH-1.SYMX, 1, 1
+ONE_ELEMENT-1.SYMX, 1, 1
 *Boundary
-PATCH-1.SYMY, 2, 2
+ONE_ELEMENT-1.SYMZ, 3, 3
 *Boundary
-PATCH-1.SYMZ, 3, 3
+REFPT_TOP, 1, 1
+REFPT_TOP, 3, 3
+REFPT_TOP, 4, 4
+REFPT_TOP, 5, 5
+REFPT_TOP, 6, 6
+*Boundary
+REFPT_BOT, 1, 1
+REFPT_BOT, 2, 2
+REFPT_BOT, 3, 3
+REFPT_BOT, 4, 4
+REFPT_BOT, 5, 5
+REFPT_BOT, 6, 6
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
@@ -106,7 +108,7 @@ PATCH-1.SYMZ, 3, 3
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary
-PATCH-1.LOAD, 2, 2, 1.0
+REFPT_TOP, 2, 2, 1.0
 **--------------------------------------------------------------------
 ** OUTPUT REQUESTS
 **--------------------------------------------------------------------
@@ -124,6 +126,6 @@ U
 **--------------------------------------------------------------------
 *Output, history, variable=PRESELECT
 *Output, history
-*Node Output, nset=PATCH-1.LOAD
-RF2
+*Element Output, elset=ONE_ELEMENT-1.ELEMENTS
+UVARM,LE
 *End Step
