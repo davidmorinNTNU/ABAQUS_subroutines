@@ -130,7 +130,7 @@
 119,4,5,0
 120,4.5,5,0
 121,5,5,0
-*Element, type=S4R	
+*Element, type=S4
   1,  1,  2, 13, 12
   2,  2,  3, 14, 13
   3,  3,  4, 15, 14
@@ -231,8 +231,6 @@
  98,107,108,119,118
  99,108,109,120,119
 100,109,110,121,120
-*Nset, nset=SYMZ, generate
-  1, 121, 1
 *Nset, nset=CLAMP
 1, 2, 3,4,5,6,7,8
 9,10,11
@@ -253,6 +251,24 @@
 *Assembly, name=Assembly
 *Instance, name=PATCH-1, part=PATCH
 *End Instance
+*Node
+      1,           0.,          6.,           0.
+      2,           0.,         -1.,           0.
+*Nset, nset=REFPT_TOP
+ 1,
+*Nset, nset=REFPT_BOT
+ 2,
+*Surface, type=NODE, name=PATCH-1_LOAD_CNS_, internal
+PATCH-1.LOAD, 1.
+*Surface, type=NODE, name=PATCH-1_CLAMP_CNS_, internal
+PATCH-1.CLAMP, 1.
+**--------------------------------------------------------------------
+** Constraint: MPC
+**--------------------------------------------------------------------
+*MPC
+BEAM, PATCH-1.LOAD, REFPT_TOP
+*MPC
+BEAM, PATCH-1.CLAMP, REFPT_BOT
 *End Assembly
 **--------------------------------------------------------------------
 *Amplitude, name=Amp-1, definition=SMOOTH STEP
@@ -272,29 +288,29 @@
 100.0
 *Depvar, delete=3
 3,
-1,PEEQ,'Equivalent plastic strain'
-2,D,'Damage variable'
-3,STATUS,'Failure status'
+1,PEEQ,"Equivalent plastic strain"
+2,D,"Damage variable"
+3,STATUS,"Failure status"
 **--------------------------------------------------------------------
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary
-PATCH-1.CLAMP, 1, 1
-PATCH-1.CLAMP, 2, 2
-PATCH-1.CLAMP, 4, 4
-PATCH-1.CLAMP, 6, 6
+REFPT_TOP, 1, 1
+REFPT_TOP, 3, 3
+REFPT_TOP, 4, 4
+REFPT_TOP, 5, 5
+REFPT_TOP, 6, 6
 *Boundary
-PATCH-1.LOAD, 1, 1
-PATCH-1.LOAD, 4, 4
-PATCH-1.LOAD, 6, 6
+REFPT_BOT, 1, 1
+REFPT_BOT, 2, 2
+REFPT_BOT, 3, 3
+REFPT_BOT, 4, 4
+REFPT_BOT, 5, 5
+REFPT_BOT, 6, 6
 *Boundary
 PATCH-1.SYMX, 1, 1
 PATCH-1.SYMX, 5, 5
 PATCH-1.SYMX, 6, 6
-*Boundary
-PATCH-1.SYMZ, 3, 3
-PATCH-1.SYMZ, 4, 4
-PATCH-1.SYMZ, 5, 5
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
@@ -307,7 +323,7 @@ PATCH-1.SYMZ, 5, 5
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary, amplitude=Amp-1, type=VELOCITY
-PATCH-1.LOAD, 2, 2, 100.
+REFPT_TOP, 2, 2, 100.
 **--------------------------------------------------------------------
 ** OUTPUT REQUESTS
 **--------------------------------------------------------------------
@@ -317,7 +333,7 @@ PATCH-1.LOAD, 2, 2, 100.
 **--------------------------------------------------------------------
 *Output, field, number interval=100, time marks=YES
 *Element Output, directions=YES
-PEEQ, S, SDV, STATUS
+PEEQ, S, SDV, STATUS, STH
 *Node Output
 U
 **--------------------------------------------------------------------
@@ -325,6 +341,6 @@ U
 **--------------------------------------------------------------------
 *Output, history, variable=PRESELECT, time interval=0.00001
 *Output, history, time interval=0.00001
-*Node Output, nset=PATCH-1.LOAD
-RF2
+*Node Output, nset=REFPT_TOP
+RF2,U2
 *End Step	
