@@ -135,14 +135,10 @@ U
 **--------------------------------------------------------------------
 ** HISTORY OUTPUT
 **--------------------------------------------------------------------
-*Output, history, time interval=0.001
-*Node Output, nset=TENS-1.LOAD
-RF2
-*Node Output, nset=COMP-1.LOAD
-RF2
-*Node Output, nset=TENS-1.DISP
-U2
-*Node Output, nset=COMP-1.DISP
-U2
+*Output, history, time interval=0.00001
+*Element Output, elset=TENS-1.ELEMENTS
+LE,S
+*Element Output, elset=COMP-1.ELEMENTS
+LE,S
 *Output, history, variable=PRESELECT, time interval=0.00001
 *END STEP
