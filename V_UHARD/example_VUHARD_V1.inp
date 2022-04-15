@@ -19,7 +19,7 @@
       8, 0,    5,    5  
 *Element, type=C3D8R
 1, 8, 5, 6, 7, 1, 2, 3, 4
-*Nset, nset=SYMY
+*Nset, nset=CLAMP
   2,  3,  5,  6
 *Nset, nset=SYMX
   5,  6,  7,  8
@@ -47,7 +47,7 @@
       8, 0,    5,    5  
 *Element, type=C3D8R
 1, 8, 5, 6, 7, 1, 2, 3, 4
-*Nset, nset=SYMY
+*Nset, nset=CLAMP
   2,  3,  5,  6
 *Nset, nset=SYMX
   5,  6,  7,  8
@@ -69,7 +69,47 @@
 *Instance, name=TENS_1-1, part=TENS_1
 *End Instance
 *Instance, name=TENS_2-1, part=TENS_2
+6.0, 0.0, 0.0
 *End Instance
+*Node
+      1,          2.5,          6.,           0.
+      2,          2.5,         -1.,           0.
+      3,          8.5,          6.,           0.
+      4,          8.5,         -1.,           0.
+*Nset, nset=REFPT_TOP
+ 1,
+*Nset, nset=REFPT_BOT
+ 2,
+**
+*Nset, nset=REFPT_TOP_2
+ 3,
+*Nset, nset=REFPT_BOT_2
+ 4,
+*Surface, type=NODE, name=TENS_1-1_LOAD_CNS_, internal
+TENS_1-1.LOAD, 1.
+*Surface, type=NODE, name=TENS_1-1_CLAMP_CNS_, internal
+TENS_1-1.CLAMP, 1.
+**
+*Surface, type=NODE, name=TENS_2-1_LOAD_CNS_, internal
+TENS_2-1.LOAD, 1.
+*Surface, type=NODE, name=TENS_2-1_CLAMP_CNS_, internal
+TENS_2-1.CLAMP, 1.
+**--------------------------------------------------------------------
+** Constraint: MPC
+**--------------------------------------------------------------------
+*Coupling, constraint name="TOP CONSTRAINT", ref node=REFPT_TOP, surface=TENS_1-1_LOAD_CNS_
+*Kinematic
+2, 2
+*Coupling, constraint name="BOTTOM CONSTRAINT", ref node=REFPT_BOT, surface=TENS_1-1_CLAMP_CNS_
+*Kinematic
+2, 2
+**
+*Coupling, constraint name="TOP CONSTRAINT 2", ref node=REFPT_TOP_2, surface=TENS_2-1_LOAD_CNS_
+*Kinematic
+2, 2
+*Coupling, constraint name="BOTTOM CONSTRAINT 2", ref node=REFPT_BOT_2, surface=TENS_2-1_CLAMP_CNS_
+*Kinematic
+2, 2
 *End Assembly
 **--------------------------------------------------------------------
 *Amplitude, name=Amp-1
@@ -102,14 +142,36 @@
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary
-TENS_1-1.SYMY, YSYMM
+REFPT_TOP, 1, 1
+REFPT_TOP, 3, 3
+REFPT_TOP, 4, 4
+REFPT_TOP, 5, 5
+REFPT_TOP, 6, 6
+*Boundary
+REFPT_TOP_2, 1, 1
+REFPT_TOP_2, 3, 3
+REFPT_TOP_2, 4, 4
+REFPT_TOP_2, 5, 5
+REFPT_TOP_2, 6, 6
+*Boundary
+REFPT_BOT, 1, 1
+REFPT_BOT, 2, 2
+REFPT_BOT, 3, 3
+REFPT_BOT, 4, 4
+REFPT_BOT, 5, 5
+REFPT_BOT, 6, 6
+*Boundary
+REFPT_BOT_2, 1, 1
+REFPT_BOT_2, 2, 2
+REFPT_BOT_2, 3, 3
+REFPT_BOT_2, 4, 4
+REFPT_BOT_2, 5, 5
+REFPT_BOT_2, 6, 6
 *Boundary
 TENS_1-1.SYMX, XSYMM
 *Boundary
 TENS_1-1.SYMZ, ZSYMM
 **
-*Boundary
-TENS_2-1.SYMY, YSYMM
 *Boundary
 TENS_2-1.SYMX, XSYMM
 *Boundary
@@ -126,10 +188,10 @@ TENS_2-1.SYMZ, ZSYMM
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary, amplitude=Amp-1
-TENS_1-1.LOAD, 2, 2, 1.0
+REFPT_TOP, 2, 2, 1.0
 **
 *Boundary, amplitude=Amp-1
-TENS_2-1.LOAD, 2, 2, 1.0
+REFPT_TOP_2, 2, 2, 1.0
 **--------------------------------------------------------------------
 ** OUTPUT REQUESTS
 **--------------------------------------------------------------------
@@ -145,14 +207,10 @@ U
 **--------------------------------------------------------------------
 ** HISTORY OUTPUT
 **--------------------------------------------------------------------
-*Output, history, time interval=0.001
-*Node Output, nset=TENS_1-1.LOAD
-RF2
-*Node Output, nset=TENS_2-1.LOAD
-RF2
-*Node Output, nset=TENS_1-1.DISP
-U2
-*Node Output, nset=TENS_2-1.DISP
-U2
+*Output, history, time interval=0.00002
+*Element Output, elset=TENS_1-1.ELEMENTS
+S,LE
+*Element Output, elset=TENS_2-1.ELEMENTS
+S,LE
 *Output, history, variable=PRESELECT, time interval=0.00002
 *END STEP
