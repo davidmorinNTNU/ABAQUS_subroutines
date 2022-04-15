@@ -19,16 +19,12 @@
       8, 0,    5,    5  
 *Element, type=C3D8R
 1, 8, 5, 6, 7, 1, 2, 3, 4
-*Nset, nset=SYMY
+*Nset, nset=CLAMP
   2,  3,  5,  6
 *Nset, nset=SYMX
   5,  6,  7,  8
 *Nset, nset=LOAD
   1,  4,  7,  8
-*Nset, nset=SYMZ
-  3,  4,  6,  7
-*Nset, nset=DISP
-  1
 *Elset, elset=ELEMENTS
  1,
 *Solid Section, elset=ELEMENTS, material=EXAMPLE_VUMAT
@@ -41,6 +37,28 @@
 *Assembly, name=Assembly
 *Instance, name=TENS_1-1, part=TENS_1
 *End Instance
+*Node
+      1,           0.,          6.,           0.
+      2,           0.,         -1.,           0.
+*Nset, nset=REFPT_TOP
+ 1,
+*Nset, nset=REFPT_BOT
+ 2,
+*Surface, type=NODE, name=TENS_1-1_LOAD_CNS_, internal
+TENS_1-1.LOAD, 1.
+*Surface, type=NODE, name=TENS_1-1_CLAMP_CNS_, internal
+TENS_1-1.CLAMP, 1.
+**--------------------------------------------------------------------
+** Constraint: MPC
+**--------------------------------------------------------------------
+*Coupling, constraint name="TOP CONSTRAINT", ref node=REFPT_TOP, surface=TENS_1-1_LOAD_CNS_
+*Kinematic
+2, 2
+3, 3
+*Coupling, constraint name="BOTTOM CONSTRAINT", ref node=REFPT_BOT, surface=TENS_1-1_CLAMP_CNS_
+*Kinematic
+2, 2
+3, 3
 *End Assembly
 **--------------------------------------------------------------------
 *Amplitude, name=Amp-1
@@ -67,11 +85,20 @@
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary
-TENS_1-1.SYMY, YSYMM
+REFPT_TOP, 1, 1
+REFPT_TOP, 3, 3
+REFPT_TOP, 4, 4
+REFPT_TOP, 5, 5
+REFPT_TOP, 6, 6
 *Boundary
 TENS_1-1.SYMX, XSYMM
 *Boundary
-TENS_1-1.SYMZ, ZSYMM
+REFPT_BOT, 1, 1
+REFPT_BOT, 2, 2
+REFPT_BOT, 3, 3
+REFPT_BOT, 4, 4
+REFPT_BOT, 5, 5
+REFPT_BOT, 6, 6
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
@@ -84,7 +111,7 @@ TENS_1-1.SYMZ, ZSYMM
 ** BOUNDARY CONDITIONS
 **--------------------------------------------------------------------
 *Boundary, amplitude=Amp-1, type=velocity
-TENS_1-1.LOAD, 2, 2, 100.0
+REFPT_TOP, 2, 2, 100.0
 **--------------------------------------------------------------------
 ** OUTPUT REQUESTS
 **--------------------------------------------------------------------
@@ -101,9 +128,9 @@ U
 ** HISTORY OUTPUT
 **--------------------------------------------------------------------
 *Output, history, time interval=0.00001
-*Node Output, nset=TENS_1-1.LOAD
-RF2
-*Node Output, nset=TENS_1-1.DISP
-U2
+*Node Output, nset=REFPT_TOP
+RF2,U2
+*Element Output, elset=TENS_1-1.ELEMENTS
+SDV,S,LE
 *Output, history, variable=PRESELECT, time interval=0.00001
 *END STEP
