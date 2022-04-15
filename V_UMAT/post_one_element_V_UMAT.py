@@ -10,7 +10,6 @@ def write_results(filename,data,keys):
     fp.write(header)
     for i in range(0,ntime):
         fp.write(format_to_write.format(*[x for x in data[i,:]]))
-    print(np.shape(data))
     fp.close()
     return
 #
