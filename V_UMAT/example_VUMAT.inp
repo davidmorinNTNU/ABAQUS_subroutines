@@ -49,7 +49,7 @@ TENS_1-1.LOAD, 1.
 *Surface, type=NODE, name=TENS_1-1_CLAMP_CNS_, internal
 TENS_1-1.CLAMP, 1.
 **--------------------------------------------------------------------
-** Constraint: MPC
+** Constraint
 **--------------------------------------------------------------------
 *Coupling, constraint name="TOP CONSTRAINT", ref node=REFPT_TOP, surface=TENS_1-1_LOAD_CNS_
 *Kinematic
