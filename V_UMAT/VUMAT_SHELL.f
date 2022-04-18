@@ -181,7 +181,7 @@ c           UNPACK STRESSES
 !-----------------------------------------------------------------------
             STRESSNEW(i,1) = STRESS(1)
             STRESSNEW(i,2) = STRESS(2)
-            STRESSNEW(i,3) = STRESS(3)
+            STRESSNEW(i,3) = 0.0
             STRESSNEW(i,4) = STRESS(4)
             STRAININC(i,3) = DSTRAN(3)
 !-----------------------------------------------------------------------
