@@ -194,7 +194,7 @@ TENS_1-1.NODES, 293.0
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
-*Step, name=LOADING
+*Step, name=LOADING, nlgeom=YES
 *Dynamic, Explicit,scale factor=0.5, ADIABATIC
 , 0.02
 *Bulk Viscosity

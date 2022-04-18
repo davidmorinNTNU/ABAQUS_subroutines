@@ -311,7 +311,7 @@ PATCH-1.SYMX, 6, 6
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
-*Step, name=LOADING
+*Step, name=LOADING, nlgeom=YES
 *Dynamic, Explicit
 , 0.012
 *Bulk Viscosity

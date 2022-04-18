@@ -108,7 +108,7 @@ COMP-1.SYMZ, ZSYMM
 **--------------------------------------------------------------------
 ** STEP
 **--------------------------------------------------------------------
-*Step, name=LOADING
+*Step, name=LOADING, nlgeom=YES
 *Dynamic, Explicit,scale factor=0.5
 , 0.01
 *Bulk Viscosity
